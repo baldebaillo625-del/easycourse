@@ -4,63 +4,55 @@
 <meta charset="UTF-8">
 <title>EasyCourse GN</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body { font-family: Arial; background:#f4f6f8; padding:20px; }
-h1 { text-align:center; }
 .container { max-width:900px; margin:auto; }
-.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-
-input, select {
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-
-button {
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  margin-top:5px;
-}
-
-.btn-add { background:#007bff; color:white; }
-.btn-status { background:#28a745; color:white; }
-.btn-delete { background:#dc3545; color:white; }
-.btn-whatsapp { background:#25D366; color:white; }
-
-.order { border-bottom:1px solid #eee; padding:10px 0; }
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; }
+input, select { width:100%; padding:10px; margin:5px 0; }
+button { padding:8px; border:none; border-radius:5px; margin-top:5px; cursor:pointer;}
+.btn { background:#007bff; color:white; }
+.green { background:#28a745; color:white; }
+.red { background:#dc3545; color:white; }
+.whatsapp { background:#25D366; color:white; }
 </style>
 </head>
 
 <body>
 
 <div class="container">
-<h1>EasyCourse GN</h1>
+
+<h2>EasyCourse GN</h2>
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+<h3>Connexion</h3>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Mot de passe">
+<button class="btn" onclick="login()">Se connecter</button>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
 
 <div class="card">
 <h3>Statistiques</h3>
-<p>Total gagné : <b id="total">0</b> GNF</p>
+Total gagné : <b id="total">0</b> GNF
 </div>
 
 <div class="card">
 <h3>Nouvelle commande</h3>
-
-<input id="client" placeholder="Nom client">
+<input id="client" placeholder="Nom">
 <input id="phone" placeholder="Téléphone">
-
 <select id="service">
 <option>Course</option>
 <option>Paiement</option>
 <option>Démarche</option>
 <option>Colis</option>
 </select>
-
-<input id="amount" type="number" placeholder="Montant (GNF)">
-
-<button class="btn-add" onclick="addOrder()">Ajouter</button>
+<input id="amount" type="number" placeholder="Montant">
+<button class="btn" onclick="addOrder()">Ajouter</button>
 </div>
 
 <div class="card">
@@ -70,9 +62,12 @@ button {
 
 </div>
 
+</div>
+
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -86,86 +81,93 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
-// CALCUL
-function calculate(amount){
-  let base = 15000;
-  let percent = amount * 0.03;
-  return base + percent;
-}
+// LOGIN
+function login(){
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
 
-// AJOUT
-function addOrder() {
-  let client = clientInput.value;
-  let phone = phoneInput.value;
-  let service = serviceInput.value;
-  let amount = Number(amountInput.value);
-
-  if(!client || !phone || amount <= 0){
-    alert("Remplis correctement !");
-    return;
-  }
-
-  let total = calculate(amount);
-
-  db.collection("orders").add({
-    client,
-    phone,
-    service,
-    amount,
-    total,
-    status: "En attente",
-    date: new Date()
+  auth.signInWithEmailAndPassword(email,password)
+  .catch(()=>{
+    auth.createUserWithEmailAndPassword(email,password);
   });
 }
 
-// CHARGEMENT
-function loadOrders() {
+// AUTH STATE
+auth.onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+    loadOrders();
+  }
+});
+
+// CALCUL
+function calculate(amount){
+  return 15000 + (amount * 0.03);
+}
+
+// AJOUT
+function addOrder(){
+  let client = client.value;
+  let phone = phone.value;
+  let service = service.value;
+  let amount = Number(amountInput.value);
+
+  if(!client || !phone || amount<=0){
+    alert("Remplis correctement");
+    return;
+  }
+
+  db.collection("orders").add({
+    client, phone, service, amount,
+    total: calculate(amount),
+    status:"En attente",
+    date:new Date()
+  });
+}
+
+// LOAD
+function loadOrders(){
   db.collection("orders").orderBy("date","desc")
-  .onSnapshot(snapshot => {
+  .onSnapshot(snap=>{
+    let html="";
+    let total=0;
 
-    let html = "";
-    let totalGain = 0;
-
-    snapshot.forEach(doc => {
+    snap.forEach(doc=>{
       let o = doc.data();
       let id = doc.id;
 
-      if(o.status === "Terminé"){
-        totalGain += o.total;
-      }
+      if(o.status==="Terminé") total += o.total;
 
-      html += `
-      <div class="order">
-        <b>${o.client}</b> (${o.phone})<br>
-        ${o.service} - ${o.amount} GNF<br>
-        Total: ${Math.round(o.total)} GNF<br>
-        Statut: ${o.status}<br>
+      html+=`
+      <div>
+      <b>${o.client}</b> (${o.phone})<br>
+      ${o.service} - ${o.amount} GNF<br>
+      Total: ${Math.round(o.total)}<br>
+      Statut: ${o.status}<br>
 
-        <button class="btn-status" onclick="updateStatus('${id}','${o.status}')">Statut</button>
-        <button class="btn-delete" onclick="deleteOrder('${id}')">Supprimer</button>
-        <button class="btn-whatsapp" onclick="sendWhatsApp('${o.phone}','${o.total}')">WhatsApp</button>
-      </div>
-      `;
+      <button class="green" onclick="updateStatus('${id}','${o.status}')">Statut</button>
+      <button class="red" onclick="deleteOrder('${id}')">Supprimer</button>
+      <button class="whatsapp" onclick="sendWhatsApp('${o.phone}','${o.total}')">WhatsApp</button>
+      <button onclick="invoice('${o.client}','${o.total}')">Facture</button>
+      <hr>
+      </div>`;
     });
 
-    document.getElementById("orders").innerHTML = html;
-    document.getElementById("total").innerText = totalGain;
+    orders.innerHTML = html;
+    document.getElementById("total").innerText = total;
   });
 }
 
 // STATUT
-function updateStatus(id, current){
-  let next = "En cours";
-  if(current === "En cours") next = "Terminé";
-  if(current === "Terminé") next = "En attente";
-
-  db.collection("orders").doc(id).update({
-    status: next
-  });
+function updateStatus(id,status){
+  let next = status==="En attente"?"En cours":status==="En cours"?"Terminé":"En attente";
+  db.collection("orders").doc(id).update({status:next});
 }
 
-// SUPPRIMER
+// DELETE
 function deleteOrder(id){
   if(confirm("Supprimer ?")){
     db.collection("orders").doc(id).delete();
@@ -173,18 +175,25 @@ function deleteOrder(id){
 }
 
 // WHATSAPP
-function sendWhatsApp(phone, total){
-  let msg = "Bonjour, total à payer : " + total + " GNF";
-  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg));
+function sendWhatsApp(phone,total){
+  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent("Total: "+total+" GNF"));
+}
+
+// FACTURE
+function invoice(name,total){
+  let w = window.open("");
+  w.document.write("<h2>EasyCourse GN</h2>");
+  w.document.write("<p>Client: "+name+"</p>");
+  w.document.write("<p>Total: "+total+" GNF</p>");
+  w.print();
 }
 
 // INPUTS
-const clientInput = document.getElementById("client");
-const phoneInput = document.getElementById("phone");
-const serviceInput = document.getElementById("service");
+const client = document.getElementById("client");
+const phone = document.getElementById("phone");
+const service = document.getElementById("service");
 const amountInput = document.getElementById("amount");
 
-loadOrders();
 </script>
 
 </body>
