@@ -19,7 +19,7 @@ input, select {
 }
 
 button {
-  padding:10px;
+  padding:8px;
   border:none;
   border-radius:6px;
   cursor:pointer;
@@ -27,6 +27,10 @@ button {
 }
 
 .btn-add { background:#007bff; color:white; }
+.btn-status { background:#28a745; color:white; }
+.btn-delete { background:#dc3545; color:white; }
+.btn-whatsapp { background:#25D366; color:white; }
+
 .order { border-bottom:1px solid #eee; padding:10px 0; }
 </style>
 </head>
@@ -35,6 +39,11 @@ button {
 
 <div class="container">
 <h1>EasyCourse GN</h1>
+
+<div class="card">
+<h3>Statistiques</h3>
+<p>Total gagné : <b id="total">0</b> GNF</p>
+</div>
 
 <div class="card">
 <h3>Nouvelle commande</h3>
@@ -61,7 +70,7 @@ button {
 
 </div>
 
-<!-- FIREBASE -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -78,43 +87,102 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function addOrder() {
-  let client = document.getElementById("client").value;
-  let phone = document.getElementById("phone").value;
-  let service = document.getElementById("service").value;
-  let amount = document.getElementById("amount").value;
+// CALCUL
+function calculate(amount){
+  let base = 15000;
+  let percent = amount * 0.03;
+  return base + percent;
+}
 
-  if(!client || !phone || !amount){
-    alert("Remplis les champs !");
+// AJOUT
+function addOrder() {
+  let client = clientInput.value;
+  let phone = phoneInput.value;
+  let service = serviceInput.value;
+  let amount = Number(amountInput.value);
+
+  if(!client || !phone || amount <= 0){
+    alert("Remplis correctement !");
     return;
   }
+
+  let total = calculate(amount);
 
   db.collection("orders").add({
     client,
     phone,
     service,
     amount,
+    total,
+    status: "En attente",
     date: new Date()
   });
 }
 
+// CHARGEMENT
 function loadOrders() {
-  db.collection("orders").onSnapshot(snapshot => {
-    let list = document.getElementById("orders");
-    list.innerHTML = "";
+  db.collection("orders").orderBy("date","desc")
+  .onSnapshot(snapshot => {
+
+    let html = "";
+    let totalGain = 0;
 
     snapshot.forEach(doc => {
       let o = doc.data();
+      let id = doc.id;
 
-      list.innerHTML += `
-        <div class="order">
-          <b>${o.client}</b><br>
-          ${o.service} - ${o.amount} GNF
-        </div>
+      if(o.status === "Terminé"){
+        totalGain += o.total;
+      }
+
+      html += `
+      <div class="order">
+        <b>${o.client}</b> (${o.phone})<br>
+        ${o.service} - ${o.amount} GNF<br>
+        Total: ${Math.round(o.total)} GNF<br>
+        Statut: ${o.status}<br>
+
+        <button class="btn-status" onclick="updateStatus('${id}','${o.status}')">Statut</button>
+        <button class="btn-delete" onclick="deleteOrder('${id}')">Supprimer</button>
+        <button class="btn-whatsapp" onclick="sendWhatsApp('${o.phone}','${o.total}')">WhatsApp</button>
+      </div>
       `;
     });
+
+    document.getElementById("orders").innerHTML = html;
+    document.getElementById("total").innerText = totalGain;
   });
 }
+
+// STATUT
+function updateStatus(id, current){
+  let next = "En cours";
+  if(current === "En cours") next = "Terminé";
+  if(current === "Terminé") next = "En attente";
+
+  db.collection("orders").doc(id).update({
+    status: next
+  });
+}
+
+// SUPPRIMER
+function deleteOrder(id){
+  if(confirm("Supprimer ?")){
+    db.collection("orders").doc(id).delete();
+  }
+}
+
+// WHATSAPP
+function sendWhatsApp(phone, total){
+  let msg = "Bonjour, total à payer : " + total + " GNF";
+  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg));
+}
+
+// INPUTS
+const clientInput = document.getElementById("client");
+const phoneInput = document.getElementById("phone");
+const serviceInput = document.getElementById("service");
+const amountInput = document.getElementById("amount");
 
 loadOrders();
 </script>
