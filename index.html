@@ -5,54 +5,34 @@
 <title>EasyCourse GN</title>
 
 <style>
-body {
-  font-family: Arial;
-  background: #f4f6f8;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+body { font-family: Arial; background:#f4f6f8; padding:20px; }
+h1 { text-align:center; }
+.container { max-width:900px; margin:auto; }
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
 
 input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 
 button {
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 5px;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  margin-top:5px;
 }
 
-.btn-add { background: #007bff; color: white; }
-.btn-status { background: #28a745; color: white; }
-.btn-whatsapp { background: #25D366; color: white; }
-.btn-pdf { background: #ff9800; color: white; }
+.btn-add { background:#007bff; color:white; }
+.btn-status { background:#28a745; color:white; }
+.btn-whatsapp { background:#25D366; color:white; }
+.btn-pdf { background:#ff9800; color:white; }
+.btn-delete { background:#dc3545; color:white; }
 
-.order {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
-}
+.order { border-bottom:1px solid #eee; padding:10px 0; }
 </style>
 </head>
 
@@ -63,10 +43,16 @@ button {
 <h1>EasyCourse GN</h1>
 
 <div class="card">
+<h3>Statistiques</h3>
+<p>Total gagné : <b id="totalGain">0</b> GNF</p>
+<p>Commandes terminées : <b id="doneCount">0</b></p>
+</div>
+
+<div class="card">
 <h3>Nouvelle commande</h3>
 
 <input id="client" placeholder="Nom client">
-<input id="phone" placeholder="Téléphone (ex: 2246...)">
+<input id="phone" placeholder="Téléphone (ex: 224...)">
 
 <select id="service">
 <option>Course</option>
@@ -89,7 +75,6 @@ button {
 </select>
 
 <button class="btn-add" onclick="addOrder()">Ajouter commande</button>
-
 </div>
 
 <div class="card">
@@ -105,7 +90,6 @@ let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 function calculate(amount, distance, urgent) {
   let base = 15000;
-
   if(distance === "moyen") base = 20000;
   if(distance === "loin") base = 25000;
 
@@ -123,8 +107,8 @@ function addOrder() {
   let distance = document.getElementById("distance").value;
   let urgent = document.getElementById("urgent").value;
 
-  if(!client || !phone || !amount){
-    alert("Remplis tous les champs !");
+  if(!client || !phone || amount <= 0){
+    alert("Remplis correctement les champs !");
     return;
   }
 
@@ -153,29 +137,54 @@ function render() {
     <div class="order">
       <b>${o.client}</b> (${o.phone})<br>
       Service: ${o.service}<br>
-      Montant: ${o.amount} GNF<br>
+      Montant: ${o.amount.toLocaleString()} GNF<br>
 
-      Frais fixe: ${o.base} GNF<br>
-      Commission (3%): ${Math.round(o.percent)} GNF<br>
+      Frais: ${o.base.toLocaleString()} GNF<br>
+      Commission (3%): ${Math.round(o.percent).toLocaleString()} GNF<br>
 
-      <b>Total: ${Math.round(o.total)} GNF</b><br>
+      <b>Total: ${Math.round(o.total).toLocaleString()} GNF</b><br>
       Statut: ${o.status}<br>
 
-      <button class="btn-status" onclick="updateStatus(${i})">Changer statut</button>
+      <button class="btn-status" onclick="updateStatus(${i})">Statut</button>
       <button class="btn-whatsapp" onclick="sendWhatsApp(${i})">WhatsApp</button>
       <button class="btn-pdf" onclick="generatePDF(${i})">Facture</button>
+      <button class="btn-delete" onclick="deleteOrder(${i})">Supprimer</button>
     </div>
     `;
   });
+
+  updateStats();
 }
 
 function updateStatus(i){
   let statuses = ["En attente","En cours","Terminé"];
-  let current = orders[i].status;
-  let next = statuses[(statuses.indexOf(current)+1)%3];
+  let next = statuses[(statuses.indexOf(orders[i].status)+1)%3];
   orders[i].status = next;
   localStorage.setItem("orders", JSON.stringify(orders));
   render();
+}
+
+function deleteOrder(i){
+  if(confirm("Supprimer cette commande ?")){
+    orders.splice(i,1);
+    localStorage.setItem("orders", JSON.stringify(orders));
+    render();
+  }
+}
+
+function updateStats(){
+  let total = 0;
+  let done = 0;
+
+  orders.forEach(o=>{
+    if(o.status==="Terminé"){
+      total += o.total;
+      done++;
+    }
+  });
+
+  document.getElementById("totalGain").innerText = total.toLocaleString();
+  document.getElementById("doneCount").innerText = done;
 }
 
 function sendWhatsApp(i){
@@ -183,26 +192,23 @@ function sendWhatsApp(i){
 
   let message = `Bonjour ${o.client},
 
-Votre commande EasyCourse GN :
+Commande EasyCourse GN :
 
 Service: ${o.service}
 Montant: ${o.amount} GNF
 
 Frais: ${o.base} GNF
-Commission (3%): ${Math.round(o.percent)} GNF
+Commission: ${Math.round(o.percent)} GNF
 
-Total: ${Math.round(o.total)} GNF
+Total: ${Math.round(o.total)} GNF`;
 
-Merci pour votre confiance.`;
-
-  let url = "https://wa.me/" + o.phone + "?text=" + encodeURIComponent(message);
-  window.open(url, "_blank");
+  window.open("https://wa.me/"+o.phone+"?text="+encodeURIComponent(message));
 }
 
 function generatePDF(i){
   let o = orders[i];
 
-  let content = `
+  let text = `
 EASYCOURSE GN
 
 Client: ${o.client}
@@ -215,16 +221,13 @@ Frais: ${o.base} GNF
 Commission: ${Math.round(o.percent)} GNF
 
 TOTAL: ${Math.round(o.total)} GNF
-
-Merci pour votre confiance.
 `;
 
-  let blob = new Blob([content], { type: "text/plain" });
-  let link = document.createElement("a");
-
-  link.href = URL.createObjectURL(blob);
-  link.download = "facture_easycourse.txt";
-  link.click();
+  let blob = new Blob([text], {type:"text/plain"});
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "facture.txt";
+  a.click();
 }
 
 render();
