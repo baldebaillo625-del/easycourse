@@ -20,8 +20,13 @@ body {
   text-align:center;
 }
 
+.hero img {
+  width:120px;
+  margin-bottom:15px;
+}
+
 .hero h1 {
-  font-size:40px;
+  font-size:38px;
 }
 
 .hero button {
@@ -86,6 +91,11 @@ footer {
   text-align:center;
   padding:20px;
 }
+
+footer img {
+  width:80px;
+  margin-bottom:10px;
+}
 </style>
 </head>
 
@@ -93,9 +103,14 @@ footer {
 
 <!-- HERO -->
 <div class="hero">
+
+<img src="logo.png">
+
 <h1>EasyCourse GN</h1>
 <p>Vos courses et démarches sans déplacement</p>
-<button onclick="contact()">Contact WhatsApp</button>
+
+<button onclick="contact()">Contacter sur WhatsApp</button>
+
 </div>
 
 <!-- SERVICES -->
@@ -103,25 +118,31 @@ footer {
 <h2 style="text-align:center;">Nos services</h2>
 
 <div class="grid">
+
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
 <h3>Courses</h3>
+<p>Nous faisons vos achats en ville</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
 <h3>Paiements</h3>
+<p>Factures et transferts</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
 <h3>Démarches</h3>
+<p>Administratif simplifié</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1048/1048317.png">
 <h3>Livraison</h3>
+<p>Colis rapides et sécurisés</p>
 </div>
+
 </div>
 </section>
 
@@ -130,6 +151,7 @@ footer {
 <h2 style="text-align:center;">Passer une commande</h2>
 
 <div class="form">
+
 <input id="nom" placeholder="Nom">
 <input id="tel" placeholder="Téléphone">
 
@@ -154,6 +176,7 @@ footer {
 </select>
 
 <button onclick="sendOrder()">Envoyer sur WhatsApp</button>
+
 </div>
 </section>
 
@@ -162,6 +185,7 @@ footer {
 <h2 style="text-align:center;">Pourquoi nous choisir ?</h2>
 
 <div class="grid">
+
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png">
 <h3>Rapide</h3>
@@ -174,8 +198,9 @@ footer {
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png">
-<h3>Disponible</h3>
+<h3>Disponible 7j/7</h3>
 </div>
+
 </div>
 </section>
 
@@ -186,8 +211,13 @@ footer {
 <p>📞 628 96 35 36</p>
 </section>
 
+<!-- FOOTER -->
 <footer>
-EasyCourse GN © 2026
+
+<img src="logo.png">
+
+<p>EasyCourse GN © 2026</p>
+
 </footer>
 
 <script>
