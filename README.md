@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>EasyCourse GN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial;
+  margin:0;
+  background:#f4f6f8;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(120deg, #007bff, #00c6ff);
+  color:white;
+  padding:80px 20px;
+  text-align:center;
+}
+
+.hero h1 {
+  font-size:40px;
+}
+
+.hero button {
+  margin-top:20px;
+  padding:12px;
+  background:#25D366;
+  border:none;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* SECTION */
+section {
+  padding:40px 20px;
+  max-width:1000px;
+  margin:auto;
+}
+
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap:20px;
+}
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width:70px;
+}
+
+/* FORM */
+.form {
+  max-width:500px;
+  margin:auto;
+}
+
+input, select {
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+}
+
+button {
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* FOOTER */
+footer {
+  background:#222;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+<h1>EasyCourse GN</h1>
+<p>Vos courses et démarches sans déplacement</p>
+<button onclick="contact()">Contact WhatsApp</button>
+</div>
+
+<!-- SERVICES -->
+<section>
+<h2 style="text-align:center;">Nos services</h2>
+
+<div class="grid">
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
+<h3>Courses</h3>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
+<h3>Paiements</h3>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
+<h3>Démarches</h3>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1048/1048317.png">
+<h3>Livraison</h3>
+</div>
+</div>
+</section>
+
+<!-- FORMULAIRE -->
+<section>
+<h2 style="text-align:center;">Passer une commande</h2>
+
+<div class="form">
+<input id="nom" placeholder="Nom">
+<input id="tel" placeholder="Téléphone">
+
+<select id="service">
+<option>Course</option>
+<option>Paiement</option>
+<option>Démarche</option>
+<option>Colis</option>
+</select>
+
+<input id="montant" type="number" placeholder="Montant (GNF)">
+
+<select id="distance">
+<option>Proche</option>
+<option>Moyen</option>
+<option>Loin</option>
+</select>
+
+<select id="urgence">
+<option>Normal</option>
+<option>Urgent</option>
+</select>
+
+<button onclick="sendOrder()">Envoyer sur WhatsApp</button>
+</div>
+</section>
+
+<!-- AVANTAGES -->
+<section>
+<h2 style="text-align:center;">Pourquoi nous choisir ?</h2>
+
+<div class="grid">
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png">
+<h3>Rapide</h3>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
+<h3>Sécurisé</h3>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png">
+<h3>Disponible</h3>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section style="text-align:center;">
+<h2>Contact</h2>
+<p>📞 625 32 23 00</p>
+<p>📞 628 96 35 36</p>
+</section>
+
+<footer>
+EasyCourse GN © 2026
+</footer>
+
+<script>
+function contact(){
+  let msg = "Bonjour, je souhaite utiliser vos services EasyCourse GN";
+  window.open("https://wa.me/224625322300?text="+encodeURIComponent(msg));
+}
+
+function sendOrder(){
+  let nom = document.getElementById("nom").value;
+  let tel = document.getElementById("tel").value;
+  let service = document.getElementById("service").value;
+  let montant = document.getElementById("montant").value;
+  let distance = document.getElementById("distance").value;
+  let urgence = document.getElementById("urgence").value;
+
+  if(!nom || !tel || !montant){
+    alert("Remplis les champs !");
+    return;
+  }
+
+  let message = `Nouvelle commande EasyCourse GN
+
+Nom: ${nom}
+Téléphone: ${tel}
+Service: ${service}
+Montant: ${montant} GNF
+Distance: ${distance}
+Urgence: ${urgence}`;
+
+  window.open("https://wa.me/224625322300?text="+encodeURIComponent(message));
+}
+</script>
+
+</body>
+</html>
