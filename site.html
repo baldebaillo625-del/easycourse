@@ -12,21 +12,30 @@ body {
   background:#f4f6f8;
 }
 
+/* HEADER */
+.header {
+  background:#fff;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.header img {
+  width:50px;
+}
+
+.header h2 {
+  margin:0;
+}
+
 /* HERO */
 .hero {
   background: linear-gradient(120deg, #007bff, #00c6ff);
   color:white;
-  padding:80px 20px;
+  padding:60px 20px;
   text-align:center;
-}
-
-.hero img {
-  width:120px;
-  margin-bottom:15px;
-}
-
-.hero h1 {
-  font-size:38px;
 }
 
 .hero button {
@@ -62,7 +71,7 @@ section {
 }
 
 .card img {
-  width:70px;
+  width:60px;
 }
 
 /* FORM */
@@ -93,7 +102,7 @@ footer {
 }
 
 footer img {
-  width:80px;
+  width:60px;
   margin-bottom:10px;
 }
 </style>
@@ -101,16 +110,17 @@ footer img {
 
 <body>
 
+<!-- HEADER -->
+<div class="header">
+<img src="logo.png">
+<h2>EasyCourse GN</h2>
+</div>
+
 <!-- HERO -->
 <div class="hero">
-
-<img src="logo.png">
-
-<h1>EasyCourse GN</h1>
-<p>Vos courses et démarches sans déplacement</p>
-
-<button onclick="contact()">Contacter sur WhatsApp</button>
-
+<h1>Vos courses sans déplacement</h1>
+<p>Rapide • Fiable • Sécurisé</p>
+<button onclick="contact()">WhatsApp</button>
 </div>
 
 <!-- SERVICES -->
@@ -122,25 +132,21 @@ footer img {
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
 <h3>Courses</h3>
-<p>Nous faisons vos achats en ville</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
 <h3>Paiements</h3>
-<p>Factures et transferts</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
 <h3>Démarches</h3>
-<p>Administratif simplifié</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1048/1048317.png">
 <h3>Livraison</h3>
-<p>Colis rapides et sécurisés</p>
 </div>
 
 </div>
@@ -162,7 +168,7 @@ footer img {
 <option>Colis</option>
 </select>
 
-<input id="montant" type="number" placeholder="Montant (GNF)">
+<input id="montant" type="number" placeholder="Montant">
 
 <select id="distance">
 <option>Proche</option>
@@ -175,7 +181,7 @@ footer img {
 <option>Urgent</option>
 </select>
 
-<button onclick="sendOrder()">Envoyer sur WhatsApp</button>
+<button onclick="sendOrder()">Envoyer</button>
 
 </div>
 </section>
@@ -198,7 +204,7 @@ footer img {
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png">
-<h3>Disponible 7j/7</h3>
+<h3>Disponible</h3>
 </div>
 
 </div>
@@ -213,17 +219,13 @@ footer img {
 
 <!-- FOOTER -->
 <footer>
-
 <img src="logo.png">
-
 <p>EasyCourse GN © 2026</p>
-
 </footer>
 
 <script>
 function contact(){
-  let msg = "Bonjour, je souhaite utiliser vos services EasyCourse GN";
-  window.open("https://wa.me/224625322300?text="+encodeURIComponent(msg));
+  window.open("https://wa.me/224625322300");
 }
 
 function sendOrder(){
@@ -239,16 +241,16 @@ function sendOrder(){
     return;
   }
 
-  let message = `Nouvelle commande EasyCourse GN
+  let msg = `Nouvelle commande EasyCourse GN
 
 Nom: ${nom}
 Téléphone: ${tel}
 Service: ${service}
-Montant: ${montant} GNF
+Montant: ${montant}
 Distance: ${distance}
 Urgence: ${urgence}`;
 
-  window.open("https://wa.me/224625322300?text="+encodeURIComponent(message));
+  window.open("https://wa.me/224625322300?text="+encodeURIComponent(msg));
 }
 </script>
 
