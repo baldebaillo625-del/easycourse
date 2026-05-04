@@ -56,6 +56,17 @@ Total gagné : <b id="total">0</b> GNF
 
 <input id="amount" type="number" placeholder="Montant (GNF)">
 
+<select id="distance">
+<option value="proche">Proche</option>
+<option value="moyen">Moyen</option>
+<option value="loin">Loin</option>
+</select>
+
+<select id="urgent">
+<option value="0">Normal</option>
+<option value="10000">Urgent (+10 000)</option>
+</select>
+
 <button class="blue" onclick="addOrder()">Ajouter</button>
 </div>
 
@@ -84,10 +95,16 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // CALCUL
-function calculate(amount){
+function calculate(amount, distance, urgent){
   let base = 15000;
+
+  if(distance === "moyen") base = 20000;
+  if(distance === "loin") base = 25000;
+
   let percent = amount * 0.03;
-  return { base, percent, total: base + percent };
+  let total = base + percent + Number(urgent);
+
+  return { base, percent, total };
 }
 
 // AJOUT
@@ -96,16 +113,19 @@ function addOrder(){
   let phone = phoneInput.value;
   let service = serviceInput.value;
   let amount = Number(amountInput.value);
+  let distance = distanceInput.value;
+  let urgent = urgentInput.value;
 
   if(!client || !phone || amount <= 0){
     alert("Remplis correctement");
     return;
   }
 
-  let calc = calculate(amount);
+  let calc = calculate(amount, distance, urgent);
 
   db.collection("orders").add({
     client, phone, service, amount,
+    distance, urgent,
     base: calc.base,
     percent: calc.percent,
     total: calc.total,
@@ -131,6 +151,9 @@ function loadOrders(){
       <div>
       <b>${o.client}</b> (${o.phone})<br>
       ${o.service} - ${o.amount} GNF<br>
+
+      Distance: ${o.distance}<br>
+      Urgence: ${o.urgent == 0 ? "Normal" : "Urgent"}<br>
 
       Frais: ${o.base} GNF<br>
       Commission (3%): ${Math.round(o.percent)} GNF<br>
@@ -171,7 +194,7 @@ function sendWhatsApp(phone,total){
   window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg));
 }
 
-// PDF PRO
+// PDF
 function generatePDF(client, phone, service, amount, total){
   const { jsPDF } = window.jspdf;
   let doc = new jsPDF();
@@ -200,6 +223,8 @@ const clientInput = document.getElementById("client");
 const phoneInput = document.getElementById("phone");
 const serviceInput = document.getElementById("service");
 const amountInput = document.getElementById("amount");
+const distanceInput = document.getElementById("distance");
+const urgentInput = document.getElementById("urgent");
 
 loadOrders();
 </script>
