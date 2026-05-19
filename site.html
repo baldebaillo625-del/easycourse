@@ -1,247 +1,655 @@
+# EasyCourse GN — Design Premium Moderne (Version Complète)
+
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>EasyCourse GN</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyCourse GN</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-body {
-  font-family: Arial;
-  margin:0;
-  background:#f4f6f8;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* HEADER */
-.header {
-  background:#fff;
-  padding:15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
+body{
+    font-family:'Inter',sans-serif;
+    background:#0B0F19;
+    color:white;
+    overflow-x:hidden;
 }
 
-.header img {
-  width:50px;
+body::before{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:rgba(0,132,255,0.15);
+    filter:blur(120px);
+    top:-200px;
+    right:-150px;
+    z-index:-1;
 }
 
-.header h2 {
-  margin:0;
+body::after{
+    content:'';
+    position:fixed;
+    width:400px;
+    height:400px;
+    background:rgba(140,82,255,0.12);
+    filter:blur(120px);
+    bottom:-150px;
+    left:-100px;
+    z-index:-1;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* NAVBAR */
+.navbar{
+    position:sticky;
+    top:15px;
+    z-index:1000;
+    width:92%;
+    margin:20px auto;
+    padding:15px 25px;
+    border-radius:24px;
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 10px 40px rgba(0,0,0,0.25);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo img{
+    width:45px;
+    height:45px;
+    border-radius:12px;
+}
+
+.logo h2{
+    font-size:20px;
+    font-weight:700;
+}
+
+.nav-btn{
+    background:linear-gradient(135deg,#0066ff,#6d3bff);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(0,102,255,0.35);
 }
 
 /* HERO */
-.hero {
-  background: linear-gradient(120deg, #007bff, #00c6ff);
-  color:white;
-  padding:60px 20px;
-  text-align:center;
+.hero{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:60px 20px;
 }
 
-.hero button {
-  margin-top:20px;
-  padding:12px;
-  background:#25D366;
-  border:none;
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
+.hero-content{
+    max-width:800px;
 }
 
-/* SECTION */
-section {
-  padding:40px 20px;
-  max-width:1000px;
-  margin:auto;
+.badge{
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:50px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    margin-bottom:25px;
+    color:#bfc8d6;
+    font-size:14px;
+}
+
+.hero h1{
+    font-size:72px;
+    line-height:1.05;
+    margin-bottom:20px;
+    font-weight:800;
+}
+
+.gradient{
+    background:linear-gradient(135deg,#00A3FF,#8B5CFF);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    color:#aeb8c7;
+    font-size:20px;
+    line-height:1.7;
+    max-width:700px;
+    margin:auto;
+}
+
+.hero-buttons{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.primary-btn{
+    background:linear-gradient(135deg,#0066ff,#7a4dff);
+    border:none;
+    padding:16px 28px;
+    color:white;
+    border-radius:18px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(0,102,255,0.35);
+}
+
+.secondary-btn{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:16px 28px;
+    color:white;
+    border-radius:18px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* SECTIONS */
+section{
+    padding:90px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.section-title p{
+    color:#9ca8bb;
+    max-width:600px;
+    margin:auto;
 }
 
 /* GRID */
-.grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap:20px;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
 }
 
-.card {
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  text-align:center;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    padding:35px 25px;
+    backdrop-filter:blur(15px);
+    transition:0.4s;
+    position:relative;
+    overflow:hidden;
 }
 
-.card img {
-  width:60px;
+.card::before{
+    content:'';
+    position:absolute;
+    width:120px;
+    height:120px;
+    background:rgba(0,132,255,0.15);
+    border-radius:50%;
+    top:-40px;
+    right:-40px;
+    filter:blur(30px);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(0,132,255,0.4);
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+}
+
+.card img{
+    width:70px;
+    margin-bottom:20px;
+}
+
+.card h3{
+    font-size:24px;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#a7b0bf;
+    line-height:1.7;
 }
 
 /* FORM */
-.form {
-  max-width:500px;
-  margin:auto;
+.order-box{
+    max-width:750px;
+    margin:auto;
+    padding:40px;
+    border-radius:32px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(18px);
 }
 
-input, select {
-  width:100%;
-  padding:10px;
-  margin:8px 0;
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
 }
 
-button {
-  padding:10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+.input-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.input-group label{
+    margin-bottom:10px;
+    color:#b7c1d0;
+    font-size:14px;
+}
+
+input,
+select{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    padding:16px;
+    color:white;
+    outline:none;
+    font-size:15px;
+}
+
+input::placeholder{
+    color:#8b97aa;
+}
+
+.submit-btn{
+    width:100%;
+    margin-top:25px;
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(135deg,#00A3FF,#7A4DFF);
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 30px rgba(0,102,255,0.35);
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.stat-box{
+    text-align:center;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.06);
+    padding:35px;
+    border-radius:24px;
+}
+
+.stat-box h3{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.stat-box p{
+    color:#9ba8bb;
+}
+
+/* CONTACT */
+.contact-box{
+    text-align:center;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:45px;
+    border-radius:30px;
+}
+
+.contact-box h2{
+    margin-bottom:20px;
+    font-size:36px;
+}
+
+.contact-box p{
+    color:#b7c1d0;
+    margin-bottom:10px;
+    font-size:18px;
 }
 
 /* FOOTER */
-footer {
-  background:#222;
-  color:white;
-  text-align:center;
-  padding:20px;
+footer{
+    margin-top:80px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding:40px 20px;
+    text-align:center;
+    color:#95a3b8;
 }
 
-footer img {
-  width:60px;
-  margin-bottom:10px;
+footer img{
+    width:70px;
+    margin-bottom:15px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+.hero h1{
+    font-size:48px;
+}
+
+.hero p{
+    font-size:17px;
+}
+
+.section-title h2{
+    font-size:32px;
+}
+
+.order-box{
+    padding:25px;
+}
+
+.navbar{
+    padding:14px 18px;
+}
+
+.logo h2{
+    font-size:18px;
+}
+
+.nav-btn{
+    padding:10px 16px;
+    font-size:14px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<img src="logo.png">
+<!-- NAVBAR -->
+<div class="navbar">
+
+<div class="logo">
+<img src="logo.png" alt="logo">
 <h2>EasyCourse GN</h2>
 </div>
 
-<!-- HERO -->
-<div class="hero">
-<h1>Vos courses sans déplacement</h1>
-<p>Rapide • Fiable • Sécurisé</p>
-<button onclick="contact()">WhatsApp</button>
+<button class="nav-btn" onclick="contact()">
+WhatsApp
+</button>
+
 </div>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+
+<div class="badge">
+Service Premium • Rapide • Fiable
+</div>
+
+<h1>
+Vos courses <span class="gradient">sans déplacement</span>
+</h1>
+
+<p>
+EasyCourse GN simplifie vos courses, paiements et livraisons avec une expérience rapide, moderne et sécurisée.
+</p>
+
+<div class="hero-buttons">
+<button class="primary-btn" onclick="contact()">
+Commander maintenant
+</button>
+
+<button class="secondary-btn">
+Découvrir nos services
+</button>
+</div>
+
+</div>
+</section>
 
 <!-- SERVICES -->
 <section>
-<h2 style="text-align:center;">Nos services</h2>
+<div class="container">
+
+<div class="section-title">
+<h2>Nos Services</h2>
+<p>
+Une solution moderne pour gérer vos courses et services du quotidien.
+</p>
+</div>
 
 <div class="grid">
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
 <h3>Courses</h3>
+<p>
+Nous effectuons vos achats et courses rapidement partout.
+</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
 <h3>Paiements</h3>
+<p>
+Paiements sécurisés et assistance financière simplifiée.
+</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
 <h3>Démarches</h3>
+<p>
+Gestion administrative et accompagnement professionnel.
+</p>
 </div>
 
 <div class="card">
 <img src="https://cdn-icons-png.flaticon.com/512/1048/1048317.png">
 <h3>Livraison</h3>
+<p>
+Livraison rapide de colis et documents avec suivi.
+</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- STATS -->
+<section>
+<div class="container">
+
+<div class="stats">
+
+<div class="stat-box">
+<h3>24/7</h3>
+<p>Disponibilité</p>
+</div>
+
+<div class="stat-box">
+<h3>100%</h3>
+<p>Sécurisé</p>
+</div>
+
+<div class="stat-box">
+<h3>+500</h3>
+<p>Clients satisfaits</p>
+</div>
+
 </div>
 
 </div>
 </section>
 
-<!-- FORMULAIRE -->
+<!-- FORM -->
 <section>
-<h2 style="text-align:center;">Passer une commande</h2>
+<div class="container">
 
-<div class="form">
+<div class="section-title">
+<h2>Passer une commande</h2>
+<p>
+Remplissez le formulaire pour envoyer votre demande rapidement.
+</p>
+</div>
 
-<input id="nom" placeholder="Nom">
-<input id="tel" placeholder="Téléphone">
+<div class="order-box">
 
+<div class="form-grid">
+
+<div class="input-group">
+<label>Nom complet</label>
+<input id="nom" placeholder="Votre nom">
+</div>
+
+<div class="input-group">
+<label>Téléphone</label>
+<input id="tel" placeholder="Votre numéro">
+</div>
+
+<div class="input-group">
+<label>Service</label>
 <select id="service">
 <option>Course</option>
 <option>Paiement</option>
 <option>Démarche</option>
 <option>Colis</option>
 </select>
+</div>
 
+<div class="input-group">
+<label>Montant</label>
 <input id="montant" type="number" placeholder="Montant">
+</div>
 
+<div class="input-group">
+<label>Distance</label>
 <select id="distance">
 <option>Proche</option>
 <option>Moyen</option>
 <option>Loin</option>
 </select>
+</div>
 
+<div class="input-group">
+<label>Urgence</label>
 <select id="urgence">
 <option>Normal</option>
 <option>Urgent</option>
 </select>
-
-<button onclick="sendOrder()">Envoyer</button>
-
-</div>
-</section>
-
-<!-- AVANTAGES -->
-<section>
-<h2 style="text-align:center;">Pourquoi nous choisir ?</h2>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png">
-<h3>Rapide</h3>
 </div>
 
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
-<h3>Sécurisé</h3>
 </div>
 
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png">
-<h3>Disponible</h3>
-</div>
+<button class="submit-btn" onclick="sendOrder()">
+Envoyer la commande
+</button>
 
+</div>
 </div>
 </section>
 
 <!-- CONTACT -->
-<section style="text-align:center;">
-<h2>Contact</h2>
+<section>
+<div class="container">
+
+<div class="contact-box">
+<h2>Contactez-nous</h2>
 <p>📞 625 32 23 00</p>
 <p>📞 628 96 35 36</p>
+
+<div style="margin-top:25px;">
+<button class="primary-btn" onclick="contact()">
+WhatsApp Direct
+</button>
+</div>
+
+</div>
+
+</div>
 </section>
 
 <!-- FOOTER -->
 <footer>
 <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
-<p>EasyCourse GN © 2026</p>
+<p>EasyCourse GN © 2026 — Tous droits réservés</p>
 </footer>
 
 <script>
 function contact(){
-  window.open("https://wa.me/224625322300");
+    window.open("https://wa.me/224625322300");
 }
 
 function sendOrder(){
-  let nom = document.getElementById("nom").value;
-  let tel = document.getElementById("tel").value;
-  let service = document.getElementById("service").value;
-  let montant = document.getElementById("montant").value;
-  let distance = document.getElementById("distance").value;
-  let urgence = document.getElementById("urgence").value;
 
-  if(!nom || !tel || !montant){
-    alert("Remplis les champs !");
-    return;
-  }
+    let nom = document.getElementById("nom").value;
+    let tel = document.getElementById("tel").value;
+    let service = document.getElementById("service").value;
+    let montant = document.getElementById("montant").value;
+    let distance = document.getElementById("distance").value;
+    let urgence = document.getElementById("urgence").value;
 
-  let msg = `Nouvelle commande EasyCourse GN
+    if(!nom || !tel || !montant){
+        alert("Veuillez remplir les champs !");
+        return;
+    }
+
+    let msg = `Nouvelle commande EasyCourse GN
 
 Nom: ${nom}
 Téléphone: ${tel}
@@ -250,9 +658,10 @@ Montant: ${montant}
 Distance: ${distance}
 Urgence: ${urgence}`;
 
-  window.open("https://wa.me/224625322300?text="+encodeURIComponent(msg));
+    window.open("https://wa.me/224625322300?text=" + encodeURIComponent(msg));
 }
 </script>
 
 </body>
 </html>
+```
